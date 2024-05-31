@@ -27,19 +27,19 @@ const ContentDetailsSection = ({
               <h6 className="text-base font-normal mb-3"> Share</h6>
               <div className="flex items-center gap-3 mb-8">
                 <div className="rounded-full overflow-hidden h-8 w-8 min-w-8">
-                  {/* <Link
+                  <Link
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://twitter.com/SekelTech"
-                  > */}
-                  <Image
-                    className="h-full w-full"
-                    src={"/x-icon.png"}
-                    height={32}
-                    width={32}
-                    alt="footer-logo"
-                  />
-                  {/* </Link> */}
+                  >
+                    <Image
+                      className="h-full w-full"
+                      src={"/x-icon.png"}
+                      height={32}
+                      width={32}
+                      alt="footer-logo"
+                    />
+                  </Link>
                 </div>
                 <div className="rounded-full overflow-hidden h-8 w-8 min-w-8">
                   <Link

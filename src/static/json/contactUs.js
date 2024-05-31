@@ -16,13 +16,11 @@ export const bannerDiscoverPower = {
     width: 300,
     alt: "img",
   },
-
 };
 
 export const information = [
   {
     title: "Email",
-    subtitle: "info@sekel.tech",
     description: (
       <>
         <Link href={"mailto:info@sekel.tech"}>info@sekel.tech</Link>
@@ -100,24 +98,28 @@ export const frequentlyAsked = {
   faqList: [
     {
       question: "What is hyperlocal marketing?",
-      answer: "",
+      answer:
+        "Hyperlocal marketing focuses on targeting a very specific local audience, often within a small geographic area, to deliver highly relevant and personalized messages.",
     },
     {
       question: "How does hyperlocal marketing benefit businesses?",
-      answer: "",
-    },
-    {
-      question: "What strategies can I use for hyperlocal marketing?",
-      answer: "",
+      answer:
+        "Hyperlocal marketing helps businesses connect with nearby customers, increasing foot traffic and engagement by tailoring promotions to local interests and needs.",
     },
     {
       question: "What strategies can I use for hyperlocal marketing?",
       answer:
-        "Track metrics like foot traffic, local website visits, and social media engagement specific to your targeted area to gauge the effectiveness of your hyperlocal marketing efforts.",
+        "Utilise geo-targeted ads, location-based social media posts, and partnerships with local influencers to create a strong online presence within your immediate community.",
+    },
+    {
+      question: "hyperlocal marketing only for small businesses?",
+      answer:
+        "No, businesses of all sizes can benefit from hyperlocal strategies by nurturing a loyal local customer base and building a reputation as a community supporter.",
     },
     {
       question: "How can I measure the success of my hyperlocal campaigns?",
-      answer: "",
+      answer:
+        "Track metrics like foot traffic, local website visits, and social media engagement specific to your targeted area to gauge the effectiveness of your hyperlocal marketing efforts.",
     },
   ],
 };

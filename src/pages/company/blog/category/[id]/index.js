@@ -16,55 +16,15 @@ import { useEffect, useState } from "react";
 const baseURLBlog = `${process.env.STRAPI_PATH}/blogs?populate[0]=blog_category&populate[1]=FeaturedImage&sort=publishedAt:desc&pagination[limit]=${PER_PAGE_FIRST}`;
 
 const baseURLCategory = `${process.env.STRAPI_PATH}/blog-categories?fields[0]=name&fields[1]=slug`;
-
-const Blog = () => {
+const BlogCategory = () => {
   const router = useRouter();
   const [blogList, setBlogList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [loaderStat, setLoader] = useState(false);
-  const [start, setStart] = useState(0);
   const [pagesCount, setPagesCount] = useState(0);
   const [currentPageNo, setcurrentPageNo] = useState(1);
 
-  const updateParent = (value) => {
-    setcurrentPageNo(value);
-    const postPerPage = getPageOffset(value) + PER_PAGE_FIRST;
-    setStart(postPerPage - PER_PAGE_FIRST);
-    window.scrollTo(0, 500);
-  };
-
-  const getBlogBySlug = (slug) => {
-    setLoader(true);
-    setcurrentPageNo(1);
-    router.push(`/company/blog/category/${slug}`);
-  };
-
-  // get blog category
-  useEffect(() => {
-    if (window.location.protocol.indexOf("https") == 0) {
-      var el = document.createElement("meta");
-      el.setAttribute("http-equiv", "Content-Security-Policy");
-      el.setAttribute("content", "upgrade-insecure-requests");
-      document.head.append(el);
-    }
-    axios
-      .get(baseURLCategory)
-      .then((response) => {
-        setCategoryList([
-          {
-            label: "All Topics",
-            value: "all",
-          },
-          ...response.data.data,
-        ]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  // get blog list
-  useEffect(() => {
+  const getBlogCategoryData = (slug, start) => {
     setLoader(true);
     if (window.location.protocol.indexOf("https") == 0) {
       var el = document.createElement("meta");
@@ -72,7 +32,14 @@ const Blog = () => {
       el.setAttribute("content", "upgrade-insecure-requests");
       document.head.append(el);
     }
-    const baseURLUpdated = baseURLBlog + "&pagination[start]=" + start;
+    const baseURLUpdated =
+      slug !== "all"
+        ? baseURLBlog +
+          "&filters[blog_category][slug][$eq]=" +
+          slug +
+          "&pagination[start]=" +
+          start
+        : baseURLBlog + "&pagination[start]=" + start;
     axios
       .get(baseURLUpdated)
       .then((response) => {
@@ -86,7 +53,49 @@ const Blog = () => {
         console.log(error);
         setLoader(false);
       });
-  }, [start]);
+  };
+
+  const updateParent = (value) => {
+    setcurrentPageNo(value);
+    const postPerPage = getPageOffset(value) + PER_PAGE_FIRST;
+    getBlogCategoryData(router.query.id, postPerPage - PER_PAGE_FIRST);
+    window.scrollTo(0, 500);
+  };
+
+  const getBlogBySlug = (slug) => {
+    if (slug === "all") {
+      router.push(`/company/blog`);
+    } else {
+      router.push(`/company/blog/category/${slug}`);
+    }
+  };
+
+  // get blog category
+  useEffect(() => {
+    if (window.location.protocol.indexOf("https") == 0) {
+      var el = document.createElement("meta");
+      el.setAttribute("http-equiv", "Content-Security-Policy");
+      el.setAttribute("content", "upgrade-insecure-requests");
+      document.head.append(el);
+    }
+    axios
+      .get(baseURLCategory)
+      .then((response) => {
+        setCategoryList([ {
+          label: "All Topics",
+          value: "all",
+        }, ...response.data.data]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  // get blog list
+  useEffect(() => {
+    setcurrentPageNo(1);
+    getBlogCategoryData(router.query.id, 0);
+  }, [router.query.id]);
 
   return (
     <>
@@ -94,7 +103,6 @@ const Blog = () => {
       <Breadcrumb
         breadcrumbList={[
           { link: "/", label: "Home" },
-          { link: "/company", label: "Company" },
           { link: "/company/blog", label: "Blog" },
         ]}
       />
@@ -111,7 +119,7 @@ const Blog = () => {
                 return (
                   <div
                     key={index}
-                    className="col-span-6 max-md:col-span-6 mb-12"
+                    className="col-span-6 max-md:col-span-6 mb-8"
                   >
                     <StoreCard
                       btnLabel={
@@ -146,4 +154,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default BlogCategory;

@@ -8,6 +8,7 @@ const StoreDetailBanner = ({
   bgImage,
   storeLogo,
   sectionSty = "bg-blue-200 py-[50px]",
+  imageBgColor = "",
 }) => {
   return (
     <section className={sectionSty}>
@@ -34,7 +35,9 @@ const StoreDetailBanner = ({
                 {bgImage && <Image {...bgImage} />}
 
                 {storeLogo && (
-                  <div className="absolute flex items-center justify-center p-2 w-[130px] h-[130px] bg-white m-auto">
+                  <div
+                    className={`absolute flex items-center justify-center p-2 w-[130px] h-[130px] m-auto ${imageBgColor}`}
+                  >
                     <Image {...storeLogo} />
                   </div>
                 )}

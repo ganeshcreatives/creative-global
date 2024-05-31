@@ -3,6 +3,7 @@ import { EMAIL_REGEX_EQUATION } from "@/constants/regex-validations-constants";
 import { EMPTY_INPUT, INVALID_EMAIL_ID } from "@/constants/snackbar-error-msg";
 import { getQuote } from "@/services/get-quote";
 import { ErrorMessage, Field, Formik, Form } from "formik";
+import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { useState } from "react";
@@ -13,10 +14,11 @@ const HyperlocalStrategyForm = ({
   placeholder = "Enter your email",
   buttonTitle = "Get a  FREE Audit",
   containerSty = "container lg:flex lg:gap-8 items-center",
-  sectionSty = 'py-6 md:py-8 bg-yellow-100 lg:py-[18px] rounded-[14px]',
+  sectionSty = "py-6 md:py-8 bg-yellow-100 lg:py-[18px] rounded-[14px]",
   showForm = true,
   newsTitle = "text-blue-600",
 }) => {
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   return (
@@ -41,7 +43,9 @@ const HyperlocalStrategyForm = ({
               onSubmit={async (values, { resetForm }) => {
                 try {
                   setIsLoading(true);
-                  const result = await getQuote({ email });
+                  const pageList = router.asPath.split("/");
+                  const pageName = pageList.pop();
+                  const result = await getQuote({ email, remark: pageName });
                   setIsLoading(false);
                   if (result.status === 200 || result.data.success === true) {
                     enqueueSnackbar("Mail sent successfully.", {

@@ -3,14 +3,23 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 
-const StoreCard = ({ bgImage, logoImage, btnLabel, description, slug }) => {
+const StoreCard = ({
+  bgImage,
+  logoImage,
+  btnLabel,
+  description,
+  slug,
+  imageBgColor = "",
+}) => {
   const router = useRouter();
   return (
     <div className="">
       <div className="relative max-h-[380px] w-full h-full flex items-center justify-center mb-[28px] border-[1px] border-blue-200 rounded-2xl overflow-hidden">
         <Image {...bgImage} />
-        {logoImage && (
-          <div className="absolute flex items-center justify-center m-auto w-[90px] h-[90px] lg:w-[120px] lg:h-[120px] bg-white">
+        {logoImage?.src && (
+          <div
+            className={`absolute flex items-center justify-center m-auto w-[90px] h-[90px] lg:w-[120px] lg:h-[120px] ${imageBgColor}`}
+          >
             <Image {...logoImage} className="h-auto max-w-full max-h-full" />
           </div>
         )}

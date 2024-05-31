@@ -3,28 +3,75 @@ import Card from "@/Components/comman/Card";
 import CardSection from "@/Components/comman/Card/CardSection";
 import InfoCard from "@/Components/comman/Card/InfoCard";
 import LovedThisContent from "@/Components/comman/Form/LovedThisContent";
+import Loader from "@/Components/comman/Loader";
 import StoreDetailBanner from "@/Components/comman/StoreDetailBanner";
 import {
-  caseStudyDetails,
   servicesIntegrated,
 } from "@/static/json/caseStudyDetails";
-import Image from "next/image";
+import axios from "axios";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const CaseStudyDetails = () => {
   const router = useRouter();
-  let studyDetails = caseStudyDetails[router.query.id];
+  const [caseStudyDetails, setCaseStudyDetails] = useState({});
+  const [loaderStat, setLoader] = useState(false);
+
+  useEffect(() => {
+    if (router.query.id) {
+      setLoader(true);
+      const baseURL = `${process.env.STRAPI_PATH}/case-studies?filters[slug][$eq]=${router.query.id}&populate[0]=case_study_category&populate[1]=featureImage&populate[2]=storeLogo&populate[3]=banner&populate[4]=storeInformation&populate[5]=goals&populate[6]=challenges&populate[7]=growth&populate[8]=applicationInformation.image`;
+      if (window.location.protocol.indexOf("https") == 0) {
+        var el = document.createElement("meta");
+        el.setAttribute("http-equiv", "Content-Security-Policy");
+        el.setAttribute("content", "upgrade-insecure-requests");
+        document.head.append(el);
+      }
+      axios
+        .get(baseURL)
+        .then((response) => {
+          setLoader(false);
+          setCaseStudyDetails(response.data.data[0]?.attributes || {});
+        })
+        .catch((error) => {
+          setLoader(false);
+          console.log(error);
+        });
+    }
+  }, [router.query.id]);
+
   return (
     <>
-      <StoreDetailBanner {...studyDetails?.banner} />
+      {loaderStat && <Loader />}
+      <StoreDetailBanner
+        {...caseStudyDetails?.banner}
+        label={caseStudyDetails?.case_study_category?.data?.attributes?.name}
+        bgImage={{
+          src: caseStudyDetails?.featureImage?.data?.attributes?.url,
+          height: 900,
+          width: 900,
+          alt: "img",
+        }}
+        storeLogo={{
+          src: caseStudyDetails?.storeLogo?.data?.attributes?.url,
+          height: 900,
+          width: 900,
+          alt: "img",
+        }}
+        imageBgColor={
+          caseStudyDetails?.brandName === "Kalyan Jewellers" ||
+          caseStudyDetails?.brandName === "Aurelia"
+            ? ""
+            : "bg-white"
+        }
+      />
       <Breadcrumb
         sectionSty="py-2"
         breadcrumbList={[
           { link: "/", label: "Home" },
-          { link: "/Company", label: "Company" },
-          { link: "/case-studies", label: "Case Studies" },
-          { link: `/${router.query.id}`, label: studyDetails?.brandName },
+          { link: "/company", label: "Company" },
+          { link: "/company/case-studies", label: "Case Studies" },
+          { link: `/${router.query.id}`, label: caseStudyDetails?.brandName },
         ]}
       />
 
@@ -36,15 +83,15 @@ const CaseStudyDetails = () => {
         textContainerSty="col-span-12 lg:col-span-6"
         imageContentSty="col-span-12 lg:col-span-6"
         gridContainerSty="grid grid-cols-12 md:gap-6"
-        {...studyDetails?.about?.sectionData}
+        {...caseStudyDetails?.storeInformation}
         renderSecondElement={
           <div>
-            {studyDetails?.about?.goals?.title && (
+            {caseStudyDetails?.goals?.length > 0 && (
               <div>
                 <h6 className="text-[32px] lg:text-[42px] font-medium text-black-33 mb-5">
-                  {studyDetails?.about?.goals?.title}
+                  Goals
                 </h6>
-                {studyDetails?.about?.goals?.list?.map((item, index) => (
+                {caseStudyDetails?.goals?.map((item, index) => (
                   <div key={index} className="flex gap-5 items-center mb-5">
                     <div className="w-8 h-8 min-w-8 bg-yellow-100 rounded-full flex items-center justify-center">
                       <p>{index + 1}</p>
@@ -56,14 +103,14 @@ const CaseStudyDetails = () => {
                 ))}
               </div>
             )}
-            {studyDetails?.about?.challenges?.title && (
+            {caseStudyDetails?.challenges?.length && (
               <div>
                 <h6 className="text-[32px] lg:text-[42px] font-medium text-black-33 mb-5">
-                  {studyDetails?.about?.challenges?.title}
+                  Challenges
                 </h6>
-                <div className="flex gap-8">
-                  {studyDetails?.about?.challenges?.list?.map((item, index) => (
-                    <div key={index} className="w-1/2 mb-5">
+                <div className="flex flex-wrap -mx-3">
+                  {caseStudyDetails?.challenges?.map((item, index) => (
+                    <div key={index} className="w-1/2 px-4 mb-5">
                       <div className="w-8 h-8 min-w-8 bg-yellow-100 rounded-full flex items-center justify-center mb-5">
                         <p>{index + 1}</p>
                       </div>
@@ -79,19 +126,25 @@ const CaseStudyDetails = () => {
         }
       />
       <CardSection
-        {...studyDetails?.growthFacts?.sectionData}
+        title="Growth Facts"
         headingSty="flex justify-center"
         sectionStyle="py-[50px] md:py-[65px] lg:py-[100px] bg-white"
-        titleSty="text-[32px] lg:text-[42px] font-medium mb-[52px] leading-[140%]  tracking-tighter text-black-33"
+        titleSty="text-[32px] lg:text-[42px] font-medium mb-[52px] leading-[140%] tracking-tighter text-black-33"
         descriptionSty="max-w-[686px] text-base font-normal leading-[22px] text-black-33 mb-[52px]"
         renderElement={() => (
           <div className="flex flex-wrap justify-center">
-            {studyDetails?.growthFacts?.cardDataList?.map((item, index) => {
+            {caseStudyDetails?.growth?.map((item, index) => {
               return (
                 <div className="w-full md:w-1/2 lg:w-1/3 max-md:pb-4 md:p-3">
                   <div className="w-full h-full" key={index}>
                     <Card
                       {...item}
+                      title={
+                        <span>
+                          {item?.title.slice(0, item?.title.indexOf(" "))}{" "}
+                          <br /> {item?.title.slice(item?.title.indexOf(" "))}
+                        </span>
+                      }
                       headingSty="text-[24px] lg:text-[28px] font-medium leading-[140%] mb-4 lg:mb-8 text-black-900"
                       descriptionSty="text-base font-normal leading-[140%] text-black-33"
                       cardSty="bg-gray-100 border border-gray-400 py-6 px-3 lg:px-10 lg:py-8 rounded-2xl h-full"
@@ -107,7 +160,14 @@ const CaseStudyDetails = () => {
         )}
       />
       <InfoCard
-        {...studyDetails?.aboutInfo}
+        {...caseStudyDetails?.applicationInformation}
+        image={{
+          src: caseStudyDetails?.applicationInformation?.image?.data?.attributes
+            ?.url,
+          height: 433,
+          width: 537,
+          alt: "img",
+        }}
         sectionStyle="py-[50px] md:py-[65px] lg:py-[100px] bg-blue-900"
         containerSty="container "
         containtWidth="lg:max-w-[503px]"

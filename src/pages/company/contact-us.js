@@ -169,7 +169,6 @@ const ContactUs = () => {
         }
       />
       <HyperlocalStrategyForm
-        containerSty="container"
         buttonTitle="Get a  FREE Audit"
         placeholder="Enter your email"
       />
