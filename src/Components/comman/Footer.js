@@ -3,8 +3,10 @@ import Button from "./Button";
 import Link from "next/link";
 import { company, product } from "@/static/json/header";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const Footer = () => {
+  const router = useRouter();
   const [open, setOpen] = useState({});
   let renderNavigationLinks = (reidrectPath, name, index) => {
     return (
@@ -49,7 +51,11 @@ const Footer = () => {
                     P_ +91-794-256-9371
                   </p>
                 </div>
-                <Button filled data="Contact us" />
+                <Button
+                  filled
+                  data="Contact us"
+                  action={() => router.push("/contact-us")}
+                />
               </div>
             </div>
             <div className="col-span-4 md:col-span-1 lg:pl-4">
@@ -241,7 +247,7 @@ const Footer = () => {
               <ul className="max-lg:flex-wrap flex max-lg:mb-8 gap-8 lg:gap-4 items-center">
                 <li>
                   <Link
-                    href={"/"}
+                    href={"/company/terms-conditions"}
                     className="font-normal text-base text-black-33"
                   >
                     Terms of Service
@@ -249,7 +255,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href={"/"}
+                    href={"/company/privacy-policy"}
                     className="font-normal text-base text-black-33"
                   >
                     Privacy Policy
@@ -257,7 +263,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    href={"/"}
+                    href={"/refund-policy"}
                     className="font-normal text-base text-black-33"
                   >
                     Refund & Cancellation Policy

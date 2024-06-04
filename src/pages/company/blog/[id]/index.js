@@ -2,10 +2,12 @@ import Breadcrumb from "@/Components/comman/Breadcrumb";
 import StoreCard from "@/Components/comman/Card/StoreCard";
 import ContentDetailsSection from "@/Components/comman/ContentDetailsSection";
 import LovedThisContent from "@/Components/comman/Form/LovedThisContent";
+import Loader from "@/Components/comman/Loader";
 import StoreDetailBanner from "@/Components/comman/StoreDetailBanner";
 import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const baseURLBlog = `${process.env.STRAPI_PATH}/blogs?populate[0]=FeaturedImage&populate[1]=blog_category&sort=publishedAt:desc&pagination[limit]=4&fields[0]=title&fields[1]=publishedAt&fields[2]=featuredImage&fields[3]=slug`;
 
@@ -13,9 +15,10 @@ const BlogDetails = () => {
   const router = useRouter();
   const [blogDetails, setBlogDetails] = useState([]);
   const [blogList, setBlogList] = useState([]);
-
+  const [loaderStat, setLoader] = useState(false);
   useEffect(() => {
     if (router.query.id) {
+      setLoader(true);
       const baseURL = `${process.env.STRAPI_PATH}/blogs?filters[slug][$eq]=${router.query.id}&populate[0]=blog_category&populate[1]=FeaturedImage`;
       if (window.location.protocol.indexOf("https") == 0) {
         var el = document.createElement("meta");
@@ -26,6 +29,7 @@ const BlogDetails = () => {
       axios
         .get(baseURL)
         .then((response) => {
+          setLoader(false);
           setBlogDetails(response.data.data[0] || []);
         })
         .catch((error) => {
@@ -54,8 +58,76 @@ const BlogDetails = () => {
         console.log(error);
       });
   }, [currentBlog]);
+
+  const jsonLd = useMemo(() => {
+    if (blogDetails?.attributes?.json_ld) {
+        return blogDetails?.attributes?.json_ld
+    }
+    return [];
+}, [blogDetails]);
+
+function addBlogJsonLd() {
+    return {
+        __html: `${jsonLd}`
+    }
+}
   return (
     <>
+      <Head>
+        <title>{blogDetails?.attributes?.title}</title>
+        <link rel="icon" href="/favicon.png" />
+        <meta
+          property="og:url"
+          content={`https://sekel.tech/company/blog/${router.query.id}`}
+        ></meta>
+        <link
+          rel="canonical"
+          href={`https://sekel.tech/company/blog/${router.query.id}`}
+        />
+        <meta
+          property="og:title"
+          content={blogDetails?.attributes?.meta_title}
+        />
+        <meta
+          property="og:keyword"
+          content={blogDetails?.attributes?.meta_keywords}
+        />
+        <meta
+          property="og:description"
+          content={blogDetails?.attributes?.meta_description}
+        />
+        <meta
+          property="og:image"
+          content={
+            blogDetails?.attributes?.featuredImage?.data?.attributes?.url
+          }
+        />
+        <meta name="keyword" content={blogDetails?.attributes?.meta_keywords} />
+        <meta
+          name="description"
+          content={blogDetails?.attributes?.meta_description}
+        />
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-H6YV1LDG7Y"
+        ></script>
+
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments)};
+                    gtag('js', new Date());
+                    gtag('config', 'G-H6YV1LDG7Y');`,
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={addBlogJsonLd()}
+          key="blog-jsonld"
+        />
+      </Head>
+      {loaderStat && <Loader />}
       <StoreDetailBanner
         label={blogDetails?.attributes?.blog_category?.data?.attributes?.name}
         title={blogDetails?.attributes?.title}
@@ -77,10 +149,10 @@ const BlogDetails = () => {
       <Breadcrumb
         breadcrumbList={[
           { link: "/", label: "Home" },
-          { link: "/company", label: "Company" },
+          { link: "/", label: "Company" },
           { link: "/company/blog", label: "Blogs" },
           {
-            link: `/company/blog/${blogDetails?.attributes?.title}`,
+            link: router.asPath,
             label: blogDetails?.attributes?.title,
           },
         ]}

@@ -1,3 +1,4 @@
+import HeadSection from "@/Components/HeadSection";
 import Banner from "@/Components/comman/Banner";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import Button from "@/Components/comman/Button";
@@ -7,6 +8,7 @@ import HyperlocalStrategyForm from "@/Components/comman/Form/hyperlocalStrategyF
 import {
   bannerData,
   importantFeatures,
+  keyFeatureSchema,
   keyProductSectionData,
   manageInfoCard,
   oneUltimatePlatform,
@@ -20,9 +22,53 @@ import React, { useState } from "react";
 export default function Dashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("hyperLocations");
+  const getItemListSchemaData = () => {
+    if (keyFeatureSchema.length !== 0) {
+      const itemListData = keyFeatureSchema.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          name: item?.name,
+          description: item?.description,
+        };
+      });
+      const itemSchemaData = `
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "url": "https://sekel.tech/product/dashboard",
+          "itemListOrder": "http://schema.org/ItemListOrderAscending",
+          "numberOfItems": ${keyFeatureSchema.length},
+          "name": "Key product features",
+          "description": "Explore limitless possibilities with our unified dashboard – Discovery, Data & Demand. In 360 (Degree Sign) approach.",
+          "itemListElement": ${JSON.stringify(itemListData)}
+          }
+          `;
+      return itemSchemaData;
+    }
+    return null;
+  };
 
+  function addKeyFeatureSchema() {
+    return {
+      __html: getItemListSchemaData(),
+    };
+  }
   return (
     <>
+      <HeadSection
+        title={bannerData?.title}
+        renderSchemaContent={() => {
+          return (
+            <>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={addKeyFeatureSchema()}
+                key="key-feature"
+              />
+            </>
+          );
+        }}
+      />
       <Banner
         {...bannerData}
         containerStyle="container flex-col mx:w-full items-center text-center pt-[56px]"
@@ -51,7 +97,7 @@ export default function Dashboard() {
       <Breadcrumb
         breadcrumbList={[
           { link: "/", label: "Home" },
-          { link: "/product", label: "Product" },
+          { link: "/", label: "Product" },
           { link: "/product/dashboard", label: "Dashboard" },
         ]}
       />
@@ -138,7 +184,7 @@ export default function Dashboard() {
             clsStyle="py-3 px-8 border-yellow-900"
             filled
             action={() => {
-              router.push("/product/integration");
+              router.push("/product/integrations");
             }}
           />
         }

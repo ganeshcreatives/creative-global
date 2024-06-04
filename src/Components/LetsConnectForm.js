@@ -76,7 +76,7 @@ const LetsConnectForm = ({ buttonLabel = "Get a Free Quote" }) => {
               <ErrorMessage
                 name="name"
                 component="span"
-                className="font-sans text-red-600 text-xs"
+                className="text-red-600 text-xs"
               />
             </div>
           </div>
@@ -91,7 +91,7 @@ const LetsConnectForm = ({ buttonLabel = "Get a Free Quote" }) => {
               <ErrorMessage
                 name="email"
                 component="span"
-                className="font-sans text-red-600 text-xs"
+                className="text-red-600 text-xs"
               />
             </div>
           </div>
@@ -107,7 +107,7 @@ const LetsConnectForm = ({ buttonLabel = "Get a Free Quote" }) => {
               <ErrorMessage
                 name="message"
                 component="span"
-                className="font-sans text-red-600 text-xs"
+                className="text-red-600 text-xs"
               />
             </div>
           </div>

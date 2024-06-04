@@ -1,3 +1,4 @@
+import HeadSection from "@/Components/HeadSection";
 import Banner from "@/Components/comman/Banner";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import Button from "@/Components/comman/Button";
@@ -6,7 +7,6 @@ import CardSection from "@/Components/comman/Card/CardSection";
 import InfoCard from "@/Components/comman/Card/InfoCard";
 import HyperlocalStrategyForm from "@/Components/comman/Form/hyperlocalStrategyForm";
 import DownArrow from "@/assets/DownArrow";
-import { oneUltimatePlatform } from "@/static/json/dashboard";
 import {
   accelerateAgency,
   demandGeneration,
@@ -16,12 +16,73 @@ import {
 } from "@/static/json/partnerProgramme";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo } from "react";
 
 const PartnerProgramme = () => {
   const router = useRouter();
+  const itemListSchema = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      url: "https://sekel.tech/home/company/partner-programme",
+      itemListOrder: "http://schema.org/ItemListOrderAscending",
+      numberOfItems: "6",
+      name: "Expand your Reach",
+      description:
+        "Elevate your agency’s success by reselling our pioneering Hyperlocal Marketing services. Join our Partner Program for smart hyperlocal and new revenue streams.",
+      itemListElement: accelerateAgency?.growthCardList?.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          name: accelerateAgency?.growthCardList?.title,
+          description: accelerateAgency?.growthCardList?.description,
+        };
+      }),
+    };
+  }, []);
+
+  const faqListSchema = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: questionAnswers?.list?.map((item, index) => {
+        return {
+          "@type": "Question",
+          name: item?.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: item?.answer,
+          },
+        };
+      }),
+    };
+  }, []);
   return (
     <div>
+      <HeadSection
+        title={`Partner Program | Expand Your Network With Sekel Tech`}
+        description="Become a Sekel Tech Partner Today. Increase your revenue, enhance your portfolio, and help your clients with our innovative solutions."
+        canonical={`https://sekel.tech/company/partner-programme`}
+        img="/logo.svg"
+        renderSchemaContent={() => (
+          <>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(itemListSchema),
+              }}
+              key="list-item"
+            />
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(faqListSchema),
+              }}
+              key="faq-list"
+            />
+          </>
+        )}
+      />
       <Banner
         {...expendYourReach}
         sectionSty="py-[50px] md:py-[60px] lg:pt-20 lg:pb-[100px]"
@@ -36,8 +97,11 @@ const PartnerProgramme = () => {
       <Breadcrumb
         breadcrumbList={[
           { link: "/", label: "Home" },
-          { link: "/company", label: "Company" },
-          { link: "/partner-programme", label: "Partnership Programme" },
+          { link: "/", label: "Company" },
+          {
+            link: "/company/partner-programme",
+            label: "Partnership Programme",
+          },
         ]}
       />
       <CardSection
@@ -89,6 +153,7 @@ const PartnerProgramme = () => {
                 {accelerateAgency?.growthCardList?.map((item, index) => {
                   return (
                     <Card
+                      key={index}
                       {...item}
                       headingSty="text-[24px] lg:text-[28px] font-medium leading-[30px] mb-4  "
                       cardSty="mb-8 w-full md:w-[calc(50%_-_10px)] "

@@ -7,7 +7,6 @@ const SidebarSection = ({
   sidebarTitle,
   sidebarFilterData,
   renderElement,
-  cardList,
   onHandleFilter,
   renderHeaderElement,
   cardContainerSty = "grid grid-cols-12 gap-x-4 lg:gap-x-8",
@@ -111,15 +110,7 @@ const SidebarSection = ({
           )}
           <div className={galleryBoxSty}>
             <div className={cardContainerSty}>
-              {cardList
-                ? cardList.map((item, index) => {
-                    if (
-                      currentFilter === "all" ||
-                      item?.btnLabel === currentFilter
-                    )
-                      return renderElement && renderElement(item, index);
-                  })
-                : renderElement && renderElement()}
+              {renderElement && renderElement()}
             </div>
           </div>
         </div>

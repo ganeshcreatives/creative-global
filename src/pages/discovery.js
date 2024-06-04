@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useMemo } from "react";
 import Banner from "@/Components/comman/Banner";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import Card from "@/Components/comman/Card";
@@ -12,6 +12,7 @@ import {
   discoveryFeature,
   investmentFocus,
 } from "@/static/json/discovery";
+import HeadSection from "@/Components/HeadSection";
 
 const Discovery = () => {
   const renderDiscoveryFeature = () => {
@@ -67,8 +68,45 @@ const Discovery = () => {
     );
   };
 
+  const itemListSchema = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      url: "https://sekel.tech/discovery",
+      itemListOrder: "http://schema.org/ItemListOrderAscending",
+      numberOfItems: discoveryFeature?.cardData?.length,
+      name: "Discovery Platform - Building Genuine Digital Connections",
+      description:
+        "Leverage Sekel Tech's organic and paid discovery for genuine leads, boosting footfalls and establishing trust and authority in your digital landscape with real-time reporting.",
+      itemListElement: discoveryFeature?.cardData?.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          name: item?.title,
+          description: item?.description,
+        };
+      }),
+    };
+  }, []);
+
   return (
     <div>
+      <HeadSection
+        {...bannerDiscovery}
+        renderSchemaContent={() => {
+          return (
+            <>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(itemListSchema),
+                }}
+                key="list-item"
+              />
+            </>
+          );
+        }}
+      />
       <Banner
         {...bannerDiscovery}
         sectionSty="max-lg:pt-8 pb-[50px] md:pb-[60px] lg:pb-[100px] pt-20"

@@ -45,7 +45,7 @@ const HyperlocalStrategyForm = ({
                   setIsLoading(true);
                   const pageList = router.asPath.split("/");
                   const pageName = pageList.pop();
-                  const result = await getQuote({ email, remark: pageName });
+                  const result = await getQuote({ ...values.email, remark: pageName });
                   setIsLoading(false);
                   if (result.status === 200 || result.data.success === true) {
                     enqueueSnackbar("Mail sent successfully.", {
@@ -85,7 +85,7 @@ const HyperlocalStrategyForm = ({
                   <ErrorMessage
                     name="email"
                     component="span"
-                    className="font-sans pt-4 text-red-600 text-center not-italic text-md"
+                    className="pt-4 text-red-600 text-center not-italic text-md"
                   />
                 </Form>
               )}

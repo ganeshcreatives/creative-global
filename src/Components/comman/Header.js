@@ -33,7 +33,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-blue-900">
+    <header className="bg-blue-900 top-0 sticky z-[9999] transition-all">
       <div className="container w-full">
         <div className="flex items-center justify-between py-5 lg:py-8">
           <Link href={'/'} className="lg:w-[190px] md:w-[200px] lg:w-[221px]">

@@ -22,6 +22,7 @@ export const discoveryCardData = [
     image: {
       src: "/discoverd-img.gif",
     },
+    slug: "/discovery",
   },
   {
     title: "Plug & Play Data",
@@ -30,6 +31,7 @@ export const discoveryCardData = [
     image: {
       src: "/play-data.gif",
     },
+    slug: "/data",
   },
   {
     title: "Generate Demand",
@@ -38,6 +40,7 @@ export const discoveryCardData = [
     image: {
       src: "/generate-demand-img.gif",
     },
+    slug: "/deamnd",
   },
 ];
 
@@ -66,9 +69,9 @@ export const chanllengesSection = {
 
 export const chanllenges = [
   {
-    title:
+    question:
       "We generate plenty of leads monthly, but lack visibility on their outcomes. How do we gain insights and optimise our efforts?",
-    description: `To gain insights and optimize your efforts with generated leads, you need a solution that offers robust analytics and tracking capabilities. This will allow you to monitor the outcomes of your leads and adjust your strategies accordingly.`,
+    answer: `To gain insights and optimize your efforts with generated leads, you need a solution that offers robust analytics and tracking capabilities. This will allow you to monitor the outcomes of your leads and adjust your strategies accordingly.`,
     list: [
       {
         title: "Data Integration",
@@ -82,19 +85,19 @@ export const chanllenges = [
     ],
   },
   {
-    title:
+    question:
       "Our traditional method of demand generation through leads is not working out due to high TAT and Junk Data",
-    description: `To address the challenges with high turnaround time (TAT) and junk data in your traditional demand generation methods, you need a solution that can streamline lead generation and data quality.`,
+      answer: `To address the challenges with high turnaround time (TAT) and junk data in your traditional demand generation methods, you need a solution that can streamline lead generation and data quality.`,
   },
   {
-    title:
+    question:
       "While the volume targets are getting achieved, we are facing issues with lead quality & CPl",
-    description: `To address the issues with lead quality and Cost Per Lead (CPL) while achieving volume targets, you need a solution that can improve lead targeting and qualification processes. By refining your targeting criteria and qualifying leads more effectively, you can improve lead quality and reduce CPL, ultimately enhancing the overall performance of your demand generation efforts.`,
+      answer: `To address the issues with lead quality and Cost Per Lead (CPL) while achieving volume targets, you need a solution that can improve lead targeting and qualification processes. By refining your targeting criteria and qualifying leads more effectively, you can improve lead quality and reduce CPL, ultimately enhancing the overall performance of your demand generation efforts.`,
   },
   {
-    title:
+    question:
       "The challenge is acquiring and maintaining accurate location data for effective marketing and lead generation. Seamless integration with marketing systems is crucial for targeted success.",
-    description: `To address the challenge of obtaining and maintaining accurate location data, consider implementing a robust location data management system. This system should streamline the integration of marketing systems with location data, ensuring that each store's information is accurate and up-to-date. Additionally, regular audits and updates to the location data can help maintain its accuracy over time.`,
+      answer: `To address the challenge of obtaining and maintaining accurate location data, consider implementing a robust location data management system. This system should streamline the integration of marketing systems with location data, ensuring that each store's information is accurate and up-to-date. Additionally, regular audits and updates to the location data can help maintain its accuracy over time.`,
   },
 ];
 export const sliderSection = {

@@ -1,3 +1,4 @@
+import HeadSection from "@/Components/HeadSection";
 import Banner from "@/Components/comman/Banner";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import Button from "@/Components/comman/Button";
@@ -11,13 +12,55 @@ import {
 } from "@/static/json/howItWorks";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo } from "react";
 
 export default function HowItWorks() {
   const router = useRouter();
 
+  const itemListSchema = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      url: "https://sekel.tech/how-it-works",
+      itemListOrder: "http://schema.org/ItemListOrderAscending",
+      numberOfItems: hyperlocalDiscovery?.length,
+      name: "360º Consumer Journey from Discovery to Delivery",
+      description:
+        "Explore Sekel Tech's transformative journey, from forming connections to supercharging data and unleashing demand. Discover the power of Retail AI",
+      itemListElement: hyperlocalDiscovery?.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          name: item?.title,
+          description:
+            item?.description +
+            " " +
+            item?.list[0].title +
+            " " +
+            item?.list[1].title,
+        };
+      }),
+    };
+  }, []);
+
   return (
     <>
+      <HeadSection
+        {...bannerHowItworks}
+        renderSchemaContent={() => {
+          return (
+            <>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(itemListSchema),
+                }}
+                key="list-item"
+              />
+            </>
+          );
+        }}
+      />
       <Banner
         {...bannerHowItworks}
         sectionSty="max-lg:py-10 max-sm:py-8"

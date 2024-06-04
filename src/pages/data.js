@@ -1,3 +1,4 @@
+import HeadSection from "@/Components/HeadSection";
 import Banner from "@/Components/comman/Banner";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import Card from "@/Components/comman/Card";
@@ -5,7 +6,6 @@ import CardSection from "@/Components/comman/Card/CardSection";
 import InfoCard from "@/Components/comman/Card/InfoCard";
 import GetStartForm from "@/Components/comman/Form/StartForm";
 import HyperlocalStrategyForm from "@/Components/comman/Form/hyperlocalStrategyForm";
-import DownArrow from "@/assets/DownArrow";
 import {
   bannerUnifiedData,
   dataPlatformFeatures,
@@ -14,7 +14,7 @@ import {
   sekelCDP,
 } from "@/static/json/data";
 import Image from "next/image";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 
 const Data = () => {
   const [knowMore, setKnowMore] = useState(false);
@@ -77,8 +77,45 @@ const Data = () => {
     );
   };
 
+  const itemListSchema = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      url: "https://sekel.tech/data",
+      itemListOrder: "http://schema.org/ItemListOrderAscending",
+      numberOfItems: dataPlatformFeatures?.cardData?.length,
+      name: "Unified Data Platform - Empowering Your Insights with Data Fusion",
+      description:
+        "Unlock the Power of Your Retail Business with Our Unified Data Platform. Seamlessly access, consolidate, and deploy data from your existing systems to supercharge discovery and engagement. Watch your content freshness and user experience soar, driving remarkable conversions and increased sales.",
+      itemListElement: dataPlatformFeatures?.cardData?.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          name: item?.title,
+          description: item?.description,
+        };
+      }),
+    };
+  }, []);
+
   return (
     <div>
+      <HeadSection
+        {...bannerUnifiedData}
+        renderSchemaContent={() => {
+          return (
+            <>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(itemListSchema),
+                }}
+                key="list-item"
+              />
+            </>
+          );
+        }}
+      />
       <Banner
         {...bannerUnifiedData}
         sectionSty="max-lg:pt-8 pb-[50px] md:pb-[60px] lg:pb-[100px] pt-20"
@@ -235,7 +272,7 @@ const Data = () => {
         imageContainerSty="lg:max-h-[448px] lg:max-w-[692px] md:mx-auto ml-auto -mr-5"
       />
 
-      <HyperlocalStrategyForm/>
+      <HyperlocalStrategyForm />
     </div>
   );
 };

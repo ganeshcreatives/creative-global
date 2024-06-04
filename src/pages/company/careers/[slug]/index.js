@@ -1,3 +1,4 @@
+import HeadSection from "@/Components/HeadSection";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import StoreCard from "@/Components/comman/Card/StoreCard";
 import ContentDetailsSection from "@/Components/comman/ContentDetailsSection";
@@ -59,6 +60,12 @@ const CareersDetails = () => {
 
   return (
     <>
+      <HeadSection
+        title={jobDetails?.attributes?.meta_title}
+        description={jobDetails?.attributes?.meta_description}
+        canonical={jobDetails?.attributes?.meta_canonical}
+        img={jobDetails?.attributes?.meta_image}
+      />
       {loaderStat && <Loader />}
       <Breadcrumb
         breadcrumbList={[

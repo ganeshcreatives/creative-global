@@ -1,3 +1,4 @@
+import HeadSection from "@/Components/HeadSection";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import StoreCard from "@/Components/comman/Card/StoreCard";
 import LovedThisContent from "@/Components/comman/Form/LovedThisContent";
@@ -10,6 +11,7 @@ import {
   totalPagesCount,
 } from "@/constants/pagination";
 import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -88,13 +90,60 @@ const Blog = () => {
       });
   }, [start]);
 
+  const getItemListSchemaData = () => {
+    if (blogList.length !== 0) {
+      const cardData = blogList;
+      const itemListData = cardData.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          name: item?.attributes?.title,
+          url: `https://sekel.tech/company/blog/${item?.attributes?.slug}`,
+        };
+      });
+      const itemSchemaData = `
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "url": "https://sekel.tech/blog",
+          "itemListOrder": "http://schema.org/ItemListOrderAscending",
+          "numberOfItems":${blogList.length},
+          "name": "Blog - Sekel Tech",
+          "itemListElement": ${JSON.stringify(itemListData)}
+          }
+          `;
+      return itemSchemaData;
+    }
+    return null;
+  };
+
+  function addBlogJsonLd() {
+    return {
+      __html: getItemListSchemaData(),
+    };
+  }
+
   return (
     <>
+      <HeadSection
+        title="Blog | Sekel Tech"
+        description="Navigate the complexities of growing your business online with Sekel Tech. Dive into our informative blogs for valuable insights into the digital realm."
+        canonical="https://sekel.tech/company/blog/"
+        img="/logo.svg"
+        renderSchemaContent={() => (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={addBlogJsonLd()}
+            key="blog-jsonld"
+          />
+        )}
+      />
+
       {loaderStat && <Loader />}
       <Breadcrumb
         breadcrumbList={[
           { link: "/", label: "Home" },
-          { link: "/company", label: "Company" },
+          { link: "/", label: "Company" },
           { link: "/company/blog", label: "Blog" },
         ]}
       />

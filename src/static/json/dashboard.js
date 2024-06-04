@@ -115,6 +115,39 @@ export const manageInfoCard = {
   ],
 };
 
+export const keyFeatureSchema = [
+  {
+    name: "Hyperlocal",
+    description:
+      "Effortlessly manage all your locations on a single screen, providing a streamlined and efficient approach to oversee your retail geography. Our Dynamic Listing Management optimises online presence, attracts more customers, and improves marketing efforts.",
+  },
+  {
+    name: "Content Management (Microsite)",
+    description:
+      "Sekel Tech’s Dynamic Hyperlocal Store Microsite solution empowers businesses to boost hyperlocal marketing and drive sales. These small, interconnected websites, linked to a brand’s subdomain and store locator, create organic discovery, foot traffic, call leads, and sales.",
+  },
+  {
+    name: "Customer Relationship Management",
+    description:
+      "Our solution seamlessly bridges the gap, requiring minimal intervention, to help dealers effortlessly reach and connect with their customer base at scale.",
+  },
+  {
+    name: "Reviews",
+    description:
+      "We transform your review management approach, boosting online presence and building trust with your audience. Through streamlined feedback, enhanced brand credibility, and improved visibility, our tools empower your digital success.",
+  },
+  {
+    name: "Product Management",
+    description:
+      "Sekel Tech’s Dynamic Hyperlocal Product Catalogues, revolutionizing hyperlocal marketing with precise, real-time product listings that connect businesses directly with local customers.",
+  },
+  {
+    name: "Publishers",
+    description:
+      "Our precision targeting ensures personalized, context-rich engagement, leading to unprecedented conversion rates. Step into a new era of cookieless, privacy-first advertising, where impact and effectiveness converge.",
+  },
+];
+
 export const importantFeatures = {
   sectionData: {
     title: "Other Important Features",
@@ -129,15 +162,15 @@ export const importantFeatures = {
   },
   list: [
     {
-      link: "",
+      link: "/data",
       label: "Role Based Access",
     },
     {
-      link: "",
+      link: "/discovery",
       label: "Store Locator",
     },
     {
-      link: "",
+      link: "/demand",
       label: "Store2Door Omni Commerce",
     },
   ],

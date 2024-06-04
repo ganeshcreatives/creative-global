@@ -1,3 +1,4 @@
+import HeadSection from "@/Components/HeadSection";
 import Banner from "@/Components/comman/Banner";
 import Breadcrumb from "@/Components/comman/Breadcrumb";
 import Button from "@/Components/comman/Button";
@@ -17,10 +18,30 @@ import {
 } from "@/static/json/sellrApp";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo } from "react";
 
 const SellrApp = () => {
   const router = useRouter();
+
+  const sellrAppSchema = useMemo(() => {
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      url: "https://sekel.tech/product/sellrapp",
+      itemListOrder: "http://schema.org/ItemListOrderAscending",
+      numberOfItems: dominateMarket?.cardDataList?.length,
+      name: dominateMarket?.sectionData?.title,
+      description: dominateMarket?.sectionData?.description,
+      itemListElement: dominateMarket?.cardDataList?.map((item, index) => {
+        return {
+          "@type": "ListItem",
+          position: index + 1,
+          name: item?.title,
+          description: item?.description,
+        };
+      }),
+    };
+  }, []);
 
   const renderCard = () => {
     return (
@@ -58,6 +79,22 @@ const SellrApp = () => {
 
   return (
     <div>
+      <HeadSection
+        {...bannerOneApp}
+        renderSchemaContent={() => {
+          return (
+            <>
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(sellrAppSchema),
+                }}
+                key="list-item"
+              />
+            </>
+          );
+        }}
+      />
       <Banner
         {...bannerOneApp}
         containerStyle="container justify-between max-md:flex-wrap"
@@ -68,12 +105,12 @@ const SellrApp = () => {
           <div className="flex gap-5 lg:gap-8">
             <button
               className="max-w-[160px] lg:w-[188px] rounded-lg overflow-hidden"
-              // onClick={() =>
-              //   window.open(
-              //     "",
-              //     "_blank"
-              //   )
-              // }
+              onClick={() =>
+                window.open(
+                  "https://play.google.com/store/apps/details?id=com.sekeltech.sellrapp",
+                  "_blank"
+                )
+              }
             >
               <Image
                 src={"/google-store.png"}
@@ -84,12 +121,12 @@ const SellrApp = () => {
             </button>
             <button
               className="max-w-[160px] lg:w-[188px] rounded-lg overflow-hidden"
-              // onClick={() =>
-              //   window.open(
-              //     "",
-              //     "_blank"
-              //   )
-              // }
+              onClick={() =>
+                window.open(
+                  "https://apps.apple.com/in/app/sellrapp/id6447759345",
+                  "_blank"
+                )
+              }
             >
               <Image src={"/app-store.png"} height={57} width={188} alt="btn" />
             </button>
@@ -101,8 +138,8 @@ const SellrApp = () => {
       <Breadcrumb
         breadcrumbList={[
           { link: "/", label: "Home" },
-          { link: "/product", label: "Product" },
-          { link: "/product/SellrApp", label: "SellrApp" },
+          { link: "/", label: "Product" },
+          { link: "/product/sellr-app", label: "SellrApp" },
         ]}
       />
       <CardSection
